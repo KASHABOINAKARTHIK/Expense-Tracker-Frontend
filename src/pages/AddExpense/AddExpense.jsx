@@ -1,0 +1,5 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import ExpenseForm from '../../components/expenses/ExpenseForm'
+import { createExpense } from '../../services/expenseService'
+export default function AddExpense(){const [submitting,setSubmitting]=useState(false);const [error,setError]=useState('');const navigate=useNavigate();const save=async(payload)=>{setSubmitting(true);setError('');try{const r=await createExpense(payload);navigate(`/expenses/${r.data.id}`,{state:{toast:'Expense added successfully.'}})}catch(err){const d=err.response?.data;setError(d?.details?.join(' ')||d?.message||'Unable to save the expense.')}finally{setSubmitting(false)}};return <div className="form-page"><div className="form-intro"><span className="eyebrow">New transaction</span><h2>Record an expense</h2><p>Add the details below. The backend will store and validate the expense.</p></div>{error&&<div className="inline-error">{error}</div>}<ExpenseForm onSubmit={save} submitting={submitting}/></div>}
