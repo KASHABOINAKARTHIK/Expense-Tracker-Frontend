@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, ReceiptText, Plus, WalletCards, Menu } from 'lucide-react'
+import { LayoutDashboard, ReceiptText, Plus, WalletCards, Menu, UserRound } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import Toast from '../common/Toast'
 import { useAuth } from '../../auth/AuthContext'
@@ -7,6 +7,7 @@ import { useAuth } from '../../auth/AuthContext'
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/expenses', label: 'Expenses', icon: ReceiptText },
+  { to: '/profile', label: 'Profile & security', icon: UserRound },
 ]
 
 export default function AppLayout() {
@@ -21,6 +22,7 @@ export default function AppLayout() {
     if (location.pathname.endsWith('/edit')) return 'Edit expense'
     if (location.pathname !== '/expenses' && location.pathname.startsWith('/expenses/')) return 'Expense details'
     if (location.pathname === '/expenses') return 'Expenses'
+    if (location.pathname === '/profile') return 'Profile & security'
     return 'Dashboard'
   }, [location.pathname])
 
