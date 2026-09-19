@@ -6,7 +6,7 @@ const USERNAME_KEY = 'tme_auth_username'
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => sessionStorage.getItem(TOKEN_KEY))
+  const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY))
   const [username, setUsername] = useState(() => sessionStorage.getItem(USERNAME_KEY))
 
   const login = (loginResponse) => {
