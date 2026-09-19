@@ -20,8 +20,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401 && !error.config?.url?.includes('/auth/login')) {
-      sessionStorage.removeItem('tme_auth_token')
-      sessionStorage.removeItem('tme_auth_username')
+      localStorage.removeItem('tme_auth_token')
+      localStorage.removeItem('tme_auth_username')
       window.location.assign('/login')
     }
     return Promise.reject(error)
