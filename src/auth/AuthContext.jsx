@@ -22,21 +22,6 @@ const readStored = () => {
 }
 
 export function AuthProvider({ children }) {
-<<<<<<< HEAD
-  const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY))
-  const [username, setUsername] = useState(() => localStorage.getItem(USERNAME_KEY))
-
-  const login = (loginResponse) => {
-    localStorage.setItem(TOKEN_KEY, loginResponse.token)
-    localStorage.setItem(USERNAME_KEY, loginResponse.username)
-    setToken(loginResponse.token)
-    setUsername(loginResponse.username)
-  }
-
-  const logout = () => {
-    localStorage.removeItem(TOKEN_KEY)
-    localStorage.removeItem(USERNAME_KEY)
-=======
   const stored = readStored()
   const [token, setToken] = useState(stored.token)
   const [user, setUser] = useState(stored.user)
@@ -46,7 +31,6 @@ export function AuthProvider({ children }) {
     localStorage.removeItem(TOKEN_KEY)
     localStorage.removeItem(USER_KEY)
     localStorage.removeItem(EXPIRY_KEY)
->>>>>>> development
     setToken(null)
     setUser(null)
     setExpiresAt(0)
