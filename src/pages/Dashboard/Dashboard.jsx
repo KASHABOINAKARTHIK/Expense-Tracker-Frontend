@@ -15,7 +15,26 @@ const monthLabel = (m) => new Date(`${m}-01T00:00:00`).toLocaleDateString('en-IN
 const shiftMonth = (m, delta) => { const [y,mo]=m.split('-').map(Number); const d=new Date(y,mo-1+delta,1); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}` }
 export default function Dashboard(){
  const [month,setMonth]=useState(currentMonth()); const [summary,setSummary]=useState(null); const [total,setTotal]=useState(0); const [recent,setRecent]=useState([]); const [loading,setLoading]=useState(true); const [error,setError]=useState(''); const navigate=useNavigate()
- const load=async()=>{setLoading(true);setError('');try{const [s,t,e]=await Promise.all([getMonthlySummary(month),getTotalToDate(),getExpenses({month})]);setSummary(s.data);setTotal(t.data?.total ?? 0);setRecent((e.data||[]).sort((a,b)=>new Date(b.expenseDate)-new Date(a.expenseDate)).slice(0,6))}catch(err){setError(err.response?.data?.message || 'Please make sure the Spring Boot backend is running.')}finally{setLoading(false)}}
+ const load = async () => {
+  setLoading(true); setError('');
+  try {
+   const [s, t, e] = await Promise.all([
+    getMonthlySummary(month),
+    getTotalToDate(),
+    getExpenses({ month, size: 6, page: 0, sort: 'expenseDate,desc' })
+   ]);
+   setSummary(s.data);
+   setTotal(t.data?.total ?? 0);
+   // Spring returns { content: [...], totalElements, ... }
+   // Handle both Page object and plain array (backward compatible)
+   const recentList = e.data?.content || e.data || [];
+   setRecent(recentList);
+  } catch (err) {
+   setError(err.response?.data?.message || 'Please make sure the Spring Boot backend is running.');
+  } finally {
+   setLoading(false);
+  }
+ };
  useEffect(()=>{load()},[month])
  const categoryCount=useMemo(()=>summary?.categories?.filter(x=>Number(x.amount)>0).length||0,[summary])
  if(loading) return <Loading label="Loading your dashboard..." />
